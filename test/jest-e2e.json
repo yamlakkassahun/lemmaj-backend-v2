@@ -1,0 +1,31 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@app/auth": "<rootDir>/../libs/auth/src",
+    "@app/auth/(.*)": "<rootDir>/../libs/auth/src/$1",
+    "@app/db": "<rootDir>/../libs/db/src",
+    "@app/db/(.*)": "<rootDir>/../libs/db/src/$1",
+    "@app/lesson-material": "<rootDir>/../libs/lesson-material/src",
+    "@app/lesson-material/(.*)": "<rootDir>/../libs/lesson-material/src/$1",
+    "@app/parameters": "<rootDir>/../libs/parameters/src",
+    "@app/parameters/(.*)": "<rootDir>/../libs/parameters/src/$1",
+    "@app/shared": "<rootDir>/../libs/shared/src",
+    "@app/shared/(.*)": "<rootDir>/../libs/shared/src/$1",
+    "@app/typeorm": "<rootDir>/../libs/typeorm/src",
+    "@app/typeorm/(.*)": "<rootDir>/../libs/typeorm/src/$1",
+    "@app/user": "<rootDir>/../libs/user/src",
+    "@app/user/(.*)": "<rootDir>/../libs/user/src/$1",
+    "@app/utili": "<rootDir>/../libs/utili/src",
+    "@app/utili/(.*)": "<rootDir>/../libs/utili/src/$1"
+  }
+}

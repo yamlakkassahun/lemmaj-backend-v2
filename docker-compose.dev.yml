@@ -1,0 +1,93 @@
+services:
+ lemmaj-api:
+    container_name: lemmaj-api
+    build:
+      context: ./
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /etc/localtime:/etc/localtime
+      - lemmaj_api_node_modules:/usr/src/app/node_modules
+    environment:
+      NODE_ENV: development
+    env_file:
+      - ./env/development.env
+    restart: unless-stopped
+    command: npm run start:dev
+    ports:
+      - 4000:3000
+    networks:
+      - lemmaj-db-net
+      - lemmaj-redis-net
+
+
+ lemmaj-db:
+    container_name: lemmaj-db
+    image: mariadb:11.0.2
+    volumes:
+      - lemmaj-db-data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MARIADB_USER: ${DB_USERNAME}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      PUID: 1000
+      PGID: 1000
+      TZ: ${TZ}
+    env_file:
+      - ./env/development.env
+    networks:
+      - lemmaj-db-net
+
+ lemmaj-adminer:
+    container_name: lemmaj-adminer
+    image: adminer:4.8.1
+    restart: unless-stopped
+    ports:
+    - "8081:8080"
+    networks:
+      - lemmaj-db-net
+
+
+ lemmaj-redis:
+    image: redis:7.0.12
+    container_name: lemmaj-redis
+    hostname: redis
+    restart: unless-stopped
+    sysctls:
+      net.core.somaxconn: '4096'
+    command:
+      - /bin/sh
+      - -c
+      - redis-server --bind lemmaj-redis --requirepass ${REDIS_PASSWORD} --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes
+    environment:
+      REDIS_HOST: lemmaj-redis
+    env_file:
+      - ./env/development.env
+    networks:
+      - lemmaj-redis-net
+
+ lemmaj-redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: lemmaj-redis-commander
+    env_file:
+      - ./env/development.env
+    environment:
+      REDIS_HOSTS: lemmaj-redis
+      REDIS_HOST: lemmaj-redis
+      REDIS_PORT: lemmaj-redis:6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      HTTP_USER: ${REDIS_COMMANDER_HTTP_USER}
+      HTTP_PASSWORD: ${REDIS_COMMANDER_HTTP_PASSWORD}
+    networks:
+      - lemmaj-redis-net
+
+
+networks:
+ lemmaj-db-net:
+ lemmaj-redis-net:
+    driver: bridge
+volumes:
+  lemmaj_api_node_modules:
+  lemmaj-db-data:
