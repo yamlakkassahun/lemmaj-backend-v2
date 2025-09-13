@@ -15,7 +15,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   app.enableCors({
-    origin: ['http://localhost:4200', 'http://localhost:5173', 'http://localhost:4201'],
+    origin: ['http://localhost:4200', 'http://localhost:5173', 'http://localhost:4201', 'https://lemmaj.com'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
