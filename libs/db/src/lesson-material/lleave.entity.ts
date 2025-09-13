@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { DutyDateEntity } from './due-date.entity';
 import { UserEntity } from '../user';
-import { ScheduleEntity } from './schedule.entity';
+import { LessonEntity } from './lesson.entity';
 
 @Entity('leaves')
 export class LeaveEntity extends BaseEntity {
@@ -24,6 +24,20 @@ export class LeaveEntity extends BaseEntity {
 
     @Column({ name: 'duty_date_id', type: 'int', unsigned: true, nullable: false })
     dutyDateId: number;
+
+    @ManyToOne(() => UserEntity, { nullable: false, eager: true })
+    @JoinColumn({ name: 'student_id', referencedColumnName: 'id' })
+    student: UserEntity;
+
+    @Column({ name: 'student_id', type: 'int', unsigned: true, nullable: false })
+    studentId: number;
+
+    @ManyToOne(() => LessonEntity, { nullable: false, eager: true })
+    @JoinColumn({ name: 'lesson_id', referencedColumnName: 'id' })
+    lesson: LessonEntity;
+
+    @Column({ name: 'lesson_id', type: 'int', unsigned: true, nullable: false })
+    lessonId: number;
 
     @Column({ type: 'boolean', nullable: false, default: false })
     isApproved: boolean;

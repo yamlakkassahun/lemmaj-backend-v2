@@ -15,6 +15,16 @@ export class CreateLeaveDto {
     @ApiProperty()
     dutyDateId: number;
 
+    @IsNumber()
+    @Type(() => Number)
+    @ApiProperty()
+    lessonId: number;
+
+    @IsNumber()
+    @Type(() => Number)
+    @ApiProperty()
+    studentId: number;
+
     @IsBoolean()
     @IsNotEmpty()
     @ApiProperty()
@@ -38,6 +48,14 @@ export const leavePageConfig: PaginateConfig<LeaveEntity> = {
         'instructor.userProfile.id',
         'instructor.userProfile.firstName',
         'instructor.userProfile.lastName',
+        'student.id',
+        'student.userProfile.id',
+        'student.userProfile.firstName',
+        'student.userProfile.lastName',
+        'lesson.id',
+        'lesson.status',
+        'lesson.package.id',
+        'lesson.package.name',
         'dutyDate.id',
         'dutyDate.date',
         'isApproved',
@@ -50,5 +68,5 @@ export const leavePageConfig: PaginateConfig<LeaveEntity> = {
         'instructor.userProfile.firstName': [FilterOperator.ILIKE],
         'dutyDate.date': [FilterOperator.BTW],
     },
-    relations: ['instructor', 'instructor.userProfile', 'dutyDate'],
+    relations: ['instructor', 'instructor.userProfile', 'student', 'student.userProfile', 'dutyDate', 'lesson', 'lesson.package'],
 };

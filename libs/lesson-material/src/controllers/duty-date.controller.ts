@@ -11,6 +11,7 @@ import { DutyDateService } from '../services';
 import {
   CreateDutyDateDto,
   dutyDatePageConfig,
+  GenerateDutyDatesDto,
   UpdateDutyDateDto,
 } from '../dtos';
 import { ApiTags, ApiCookieAuth } from '@nestjs/swagger';
@@ -22,13 +23,13 @@ import {
   PaginateQuery,
   Paginated,
 } from 'nestjs-paginate';
-import { Public } from '@app/shared';
+import { GetUser, Public } from '@app/shared';
 
 @ApiTags('Lesson-Material')
 @Controller('duty-dates')
 @ApiCookieAuth()
 export class DutyDateController {
-  constructor(private readonly dutyDateService: DutyDateService) {}
+  constructor(private readonly dutyDateService: DutyDateService) { }
 
   @Post()
   create(@Body() dto: CreateDutyDateDto) {
@@ -43,6 +44,15 @@ export class DutyDateController {
     @Paginate() query: PaginateQuery,
   ): Promise<Paginated<DutyDateEntity>> {
     return this.dutyDateService.findAll(query);
+  }
+
+  @Post('generate-weekly')
+  async generateDutyDates(
+    @Body() dto: GenerateDutyDatesDto,
+    @GetUser() user: any,
+  ): Promise<DutyDateEntity[]> {
+    dto.instructorId = user.uid;
+    return this.dutyDateService.generateDutyDates(dto);
   }
 
   @Get(':id')

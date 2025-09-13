@@ -1,17 +1,18 @@
 // duty-date.service.ts
-import { DutyDateEntity } from '@app/db';
+import { DutyDateEntity, UserEntity } from '@app/db';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import {
   CreateDutyDateDto,
   dutyDatePageConfig,
+  GenerateDutyDatesDto,
   UpdateDutyDateDto,
 } from '../dtos';
 import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
 
 @Injectable()
 export class DutyDateService {
-  constructor(private readonly ds: DataSource) {}
+  constructor(private readonly ds: DataSource) { }
 
   async create(dto: CreateDutyDateDto): Promise<DutyDateEntity> {
     const dutyDate = this.ds.getRepository(DutyDateEntity).create({
@@ -54,6 +55,53 @@ export class DutyDateService {
 
   async remove(id: number): Promise<void> {
     const dutyDate = await this.findOne(id);
+    if (dutyDate.status !== 'Available') throw new NotFoundException(`DutyDate Can not be deleted`);
     await this.ds.getRepository(DutyDateEntity).remove(dutyDate);
   }
+
+
+  // duty-date.service.ts
+  async generateDutyDates(dto: GenerateDutyDatesDto): Promise<DutyDateEntity[]> {
+    const { instructorId, startDate, endDate, startTime, endTime, status, weekday } = dto;
+
+    const instructor = await this.ds.getRepository(UserEntity).findOne({ where: { id: instructorId } });
+
+    if (!instructor) throw new NotFoundException('Instructor not found');
+
+    const weekdayIndex = [
+      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+    ].indexOf(weekday);
+
+    if (weekdayIndex === -1) {
+      throw new Error('Invalid weekday');
+    }
+
+    const dutyDates: DutyDateEntity[] = [];
+    let currentDate = new Date(startDate);
+    const finalDate = new Date(endDate);
+
+    // move currentDate to the first requested weekday
+    while (currentDate.getDay() !== weekdayIndex) {
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // generate weekly dates until endDate
+    while (currentDate <= finalDate) {
+      dutyDates.push(
+        new DutyDateEntity({
+          date: new Date(currentDate),
+          instructor,
+          startTime,
+          endTime,
+          status,
+        }),
+      );
+
+      // jump one week ahead
+      currentDate.setDate(currentDate.getDate() + 7);
+    }
+
+    return this.ds.getRepository(DutyDateEntity).save(dutyDates);
+  }
+
 }
