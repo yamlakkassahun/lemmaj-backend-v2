@@ -13,7 +13,7 @@ import {
 import { Type } from 'class-transformer';
 import { UserEntity } from '@app/db';
 import { PaginateConfig, FilterOperator } from 'nestjs-paginate';
-import { GEAR_TYPE, GearTypeEnum, GENDER_ENUM, GenderEnum } from '@app/shared';
+import { GEAR_TYPE, GearTypeEnum, GENDER_ENUM, GenderEnum, USER_STATUS, UserStatus } from '@app/shared';
 
 export const userPageConfig: PaginateConfig<UserEntity> = {
   sortableColumns: [
@@ -39,6 +39,7 @@ export const userPageConfig: PaginateConfig<UserEntity> = {
     'role.name',
     'userProfile.id',
     'userProfile.firstName',
+    'userProfile.middleName',
     'userProfile.lastName',
     'userProfile.nationalId',
     'userProfile.profilePic',
@@ -81,6 +82,14 @@ export class RegisterAdminDto {
       'First name is too short. At least, it should be $constraint1 characters, but actual is $value',
   })
   firstName: string;
+
+  @ApiPropertyOptional({
+    example: 'Doe',
+    description: 'Last name of the admin',
+  })
+  @IsString()
+  @IsOptional()
+  middleName: string;
 
   @ApiPropertyOptional({
     example: 'Doe',
@@ -148,6 +157,14 @@ export class RegisterStudentDto {
     description: 'Last name of the admin',
   })
   @IsString()
+  @IsOptional()
+  middleName?: string;
+
+  @ApiPropertyOptional({
+    example: 'Doe',
+    description: 'Last name of the admin',
+  })
+  @IsString()
   lastName: string;
 
   @ApiProperty({
@@ -164,6 +181,18 @@ export class RegisterStudentDto {
   @IsObject()
   @IsOptional()
   profilePic?: string;
+
+  @IsOptional()
+  @IsEnum(USER_STATUS, {
+    message: `status must be one of the following values: ${Object.values(USER_STATUS).join(', ')}`,
+  })
+  @ApiPropertyOptional({
+    description: 'Current status of the user',
+    example: USER_STATUS.ACTIVE,
+    enum: Object.values(USER_STATUS),
+    default: USER_STATUS.ACTIVE,
+  })
+  status?: UserStatus;
 
   @ApiPropertyOptional({
     example: 'My name is .....',

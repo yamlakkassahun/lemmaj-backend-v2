@@ -3,6 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { instanceToPlain, plainToClass } from 'class-transformer';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { LicenseProfileEntity } from '../user/license-profile';
+import { LicenseEntity } from '../user/license.entity';
 
 @Entity({ name: 'license_types' })
 export class LicenseTypeEntity extends BaseEntity {

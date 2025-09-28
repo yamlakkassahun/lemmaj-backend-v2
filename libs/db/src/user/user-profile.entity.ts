@@ -19,8 +19,11 @@ export class UserProfileEntity extends BaseEntity {
   @Column()
   firstName: string;
 
-  @Column()
-  lastName: string;
+  @Column({ nullable: true })
+  middleName?: string;
+
+  @Column({ nullable: true })
+  lastName?: string;
 
   @Column({ nullable: true })
   nationalId?: string;

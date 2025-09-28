@@ -38,6 +38,7 @@ export class StudentBuilder implements IUserBuilder {
   async getUser(): Promise<UserEntity> {
     const {
       firstName,
+      middleName,
       lastName,
       phone,
       email,
@@ -60,14 +61,17 @@ export class StudentBuilder implements IUserBuilder {
       worda,
       gender,
       gearType,
+      status,
       trainingArea,
     } = this.dto;
     this.builder = this.builder
       .setFirstName(firstName)
       .setLastName(lastName)
+      .setMiddleName(middleName)
       .setPhone(phone)
       .setEmail(email)
       .setRole(roleId)
+      .setStatus(status)
       .setPassword(password)
       .setNationalId(nationalId ?? '')
       .setDateOfBirth(dateOfBirth ? new Date(dateOfBirth) : undefined)

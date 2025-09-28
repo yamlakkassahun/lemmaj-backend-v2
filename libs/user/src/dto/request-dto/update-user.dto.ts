@@ -119,6 +119,15 @@ export class UpdateAdminDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
+  middleName?: string;
+
+  @ApiPropertyOptional({
+    example: 'Doe',
+    description: 'Last name of the admin',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   lastName?: string;
 
   @ApiProperty({
@@ -311,6 +320,7 @@ export class UpdateAdminPayload {
 
   // Profile info
   private _firstName?: string;
+  private _middleName?: string;
   private _lastName?: string;
   private _phone?: string;
   private _profilePic?: string;
@@ -342,6 +352,7 @@ export class UpdateAdminPayload {
   constructor(dto: UpdateAdminDto, userId: number) {
     const {
       firstName,
+      middleName,
       lastName,
       phone,
       roleId,
@@ -369,7 +380,9 @@ export class UpdateAdminPayload {
 
     this._userId = userId;
     this._firstName = firstName ? firstName : undefined;
+    this._middleName = middleName ? middleName : undefined;
     this._lastName = lastName ? lastName : undefined;
+
     this._phone = phone ? phone.trim() : undefined;
     this._roleId = roleId;
     this._email = email?.trim();
@@ -420,6 +433,7 @@ export class UpdateAdminPayload {
       },
       userProfile: {
         firstName: this._firstName,
+        middleName: this._middleName,
         lastName: this._lastName,
         profilePic: this._profilePic,
         nationalId: this._nationalId,

@@ -1,5 +1,6 @@
 import { LicenseProfileEntity, UserEntity, UserProfileEntity } from '@app/db';
-import { GearTypeEnum, GenderEnum, UserStatus } from '@app/shared';
+import { GearTypeEnum, GenderEnum } from '@app/shared';
+import { UserStatus } from '@app/shared/enums/user-status.enum';
 import { BadRequestException } from '@nestjs/common';
 import { capitalizeWords } from 'node-string-utils';
 import * as bcrypt from 'bcrypt';
@@ -36,14 +37,19 @@ export class UserBuilder {
     return this;
   }
 
-  setStatus(value: UserStatus): this {
-    this.user.status = value;
+  setStatus(value?: UserStatus): this {
+    this.user.status = value ? value : 'PENDING';
     return this;
   }
 
   // user profile
   setFirstName(value: string): this {
     this.user.userProfile.firstName = capitalizeWords(value);
+    return this;
+  }
+
+  setMiddleName(value?: string): this {
+    this.user.userProfile.middleName = capitalizeWords(value);
     return this;
   }
 
