@@ -77,14 +77,14 @@ export class LicenseController {
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: UpdateLicenseDto,
         @UploadedFiles()
-        files: {
+        files?: {
             profilePic?: Express.Multer.File[];
             licensePic?: Express.Multer.File[];
             licenseBackPic?: Express.Multer.File[];
         },
     ) {
-        dto.licensePic = stripImagesPrefix(files.licensePic?.[0].path);
-        dto.licenseBackPic = stripImagesPrefix(files.licenseBackPic?.[0].path);
+        dto.licensePic = stripImagesPrefix(files?.licensePic?.[0].path);
+        dto.licenseBackPic = stripImagesPrefix(files?.licenseBackPic?.[0].path);
         return this.service.update(id, dto);
     }
 

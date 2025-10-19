@@ -174,14 +174,6 @@ export class RegisterStudentDto {
   @IsString()
   phone: string;
 
-  @ApiPropertyOptional({
-    example: 'https://example.com/images/profile.jpg',
-    description: 'Profile picture URL',
-  })
-  @IsObject()
-  @IsOptional()
-  profilePic?: string;
-
   @IsOptional()
   @IsEnum(USER_STATUS, {
     message: `status must be one of the following values: ${Object.values(USER_STATUS).join(', ')}`,
@@ -298,15 +290,21 @@ export class RegisterStudentDto {
   trainingArea?: string;
 
   // register
-  @IsObject()
+  @IsString()
   @IsOptional()
   @ApiProperty({ example: 'https://example.com/license.jpg', required: false })
   licensePic?: string;
 
-  @IsObject()
+  @IsString()
   @IsOptional()
   @ApiProperty({ example: 'https://example.com/license.jpg', required: false })
   licenseBackPic?: string;
+
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ example: 'https://example.com/license.jpg', required: false })
+  profilePic?: string;
 
   @IsNumber()
   @IsNotEmpty()
@@ -344,6 +342,3 @@ export class RegisterStudentDto {
   })
   expiredDate?: Date;
 }
-
-// "nationalId": null,
-// "dateOfBirth": null,

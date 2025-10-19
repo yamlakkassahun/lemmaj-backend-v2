@@ -68,7 +68,7 @@ export class UserBuilder {
     return this;
   }
 
-  setProfilePic(value?: string): this {
+  setProfilePic(value: string): this {
     this.user.userProfile.profilePic = value;
     return this;
   }

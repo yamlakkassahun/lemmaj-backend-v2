@@ -20,8 +20,9 @@ export class AdministrativeUserBuilder implements IUserBuilder {
       .setPhone(phone)
       .setEmail(email)
       .setRole(roleId)
+      .setStatus('ACTIVE')
       .setPassword(password)
-      .setProfilePic(profilePic);
+      .setProfilePic(profilePic ?? '');
 
     return this.builder.build();
   }
@@ -75,7 +76,7 @@ export class StudentBuilder implements IUserBuilder {
       .setPassword(password)
       .setNationalId(nationalId ?? '')
       .setDateOfBirth(dateOfBirth ? new Date(dateOfBirth) : undefined)
-      .setProfilePic(profilePic)
+      .setProfilePic(profilePic ?? '')
       .setLicensePic(licensePic ?? '')
       .setLicenseBackPic(licenseBackPic ?? '')
       .setLicenseTypeId(licenseTypeId ?? 1)

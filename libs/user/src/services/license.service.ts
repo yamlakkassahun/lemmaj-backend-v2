@@ -26,12 +26,16 @@ export class LicenseService {
     }
 
     async update(id: number, dto: UpdateLicenseDto) {
-        const cert = await this.ds
-            .getRepository(LicenseEntity)
-            .findOne({ where: { id } });
-        if (!cert) throw new NotFoundException('Certificate not found');
-        const updated = this.ds.getRepository(LicenseEntity).merge(cert, dto);
-        return this.ds.getRepository(LicenseEntity).save(updated);
+        try {
+            const cert = await this.ds
+                .getRepository(LicenseEntity)
+                .findOne({ where: { id } });
+            if (!cert) throw new NotFoundException('Certificate not found');
+            const updated = this.ds.getRepository(LicenseEntity).merge(cert, dto);
+            return this.ds.getRepository(LicenseEntity).save(updated);
+        } catch (err) {
+            throw new NotFoundException('Certificate not found', err);
+        }
     }
 
     async delete(id: number) {

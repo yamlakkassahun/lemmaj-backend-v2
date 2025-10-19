@@ -150,21 +150,21 @@ export class ScheduleService {
     if (schedule.instractorTime.hasEnded && schedule.studentTime.hasEnded) {
       schedule.status = 'DONE';
       await this.noficy.create({
-        title: 'Congragulations Schedule Has Been Complited Successfuly!',
-        description: 'Congragulations Session Has Been Complited Successfuly!',
+        title: 'Congratulations Schedule Has Been Completed Successfully!',
+        description: 'Congratulations Session Has Been Completed Successfully!',
         userId: schedule?.student?.id,
       })
 
 
       await this.noficy.create({
-        title: 'Congragulations Schedule Has Been Complited Successfuly!',
-        description: 'Congragulations Session Has Been Complited Successfuly!',
+        title: 'Congratulations Schedule Has Been Completed Successfully!',
+        description: 'Congratulations Session Has Been Completed Successfully!',
         userId: schedule?.instructor?.id,
       })
 
       await this.noficy.create({
-        title: `Schedule Has Been Complited Successfuly`,
-        description: 'Schedule has been Complited Successfuly',
+        title: `Schedule Has Been Completed Successfully`,
+        description: 'Schedule has been Completed Successfully',
         userId: 1,
       });
 

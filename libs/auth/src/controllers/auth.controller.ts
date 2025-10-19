@@ -68,20 +68,22 @@ export class AuthController {
   @UsePipes(ValidationPipe)
   @UploadProfileAndLicenseFiles()
   async registerCompanyUser(
+    @Body() dto: RegisterStudentDto,
     @UploadedFiles()
-    files: {
+    files?: {
       profilePic?: Express.Multer.File[];
       licensePic?: Express.Multer.File[];
       licenseBackPic?: Express.Multer.File[];
     },
-    @Body() dto: RegisterStudentDto,
   ) {
+    dto.profilePic = stripImagesPrefix(files?.profilePic?.[0].path);
+    dto.licensePic = stripImagesPrefix(files?.licensePic?.[0].path);
+    dto.licenseBackPic = stripImagesPrefix(files?.licenseBackPic?.[0].path);
+
     const builder = new StudentBuilder({
       ...dto,
-      profilePic: stripImagesPrefix(files.profilePic?.[0].path),
-      licensePic: stripImagesPrefix(files.licensePic?.[0].path),
-      licenseBackPic: stripImagesPrefix(files.licenseBackPic?.[0].path),
     });
+
     const user = await this.userService.createUser(builder);
     return user;
   }

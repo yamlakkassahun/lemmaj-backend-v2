@@ -20,7 +20,7 @@ export class UserService {
     private readonly ds: DataSource,
     private readonly common: CommonUserService,
     private readonly getUserService: GetUserService,
-  ) {}
+  ) { }
 
   public async createUser(
     builder: IUserBuilder,

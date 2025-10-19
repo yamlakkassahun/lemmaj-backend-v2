@@ -32,6 +32,6 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, document);
 
 
-  await app.listen(3000, () => console.log(`Server is runing on http://localhost:4000/`));
+  await app.listen(3000, () => console.log(`Server is ruining on http://localhost:4000/`));
 }
 bootstrap();

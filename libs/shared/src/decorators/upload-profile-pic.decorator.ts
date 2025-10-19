@@ -21,11 +21,11 @@ export function UploadProfileAndLicenseFiles() {
           storage: diskStorage({
             destination: './images/uploads',
             filename: (req, file, cb) => {
-              const ext = extname(file.originalname);
-              const name = file.originalname
-                .replace(/\s+/g, '_')
-                .replace(ext, '');
-              cb(null, `${name}_${Date.now()}${ext}`);
+              const randomName = Array(32)
+                .fill(null)
+                .map(() => Math.round(Math.random() * 16).toString(16))
+                .join('');
+              cb(null, `${randomName}${extname(file.originalname || '')}`);
             },
           }),
         },
@@ -41,11 +41,11 @@ export function UploadProfilePicture() {
         storage: diskStorage({
           destination: './images/uploads',
           filename: (req, file, cb) => {
-            const ext = extname(file.originalname);
-            const name = file.originalname
-              .replace(/\s+/g, '_')
-              .replace(ext, '');
-            cb(null, `${name}_${Date.now()}${ext}`);
+            const randomName = Array(32)
+              .fill(null)
+              .map(() => Math.round(Math.random() * 16).toString(16))
+              .join('');
+            cb(null, `${randomName}${extname(file.originalname || '')}`);
           },
         }),
       }),
@@ -60,11 +60,11 @@ export function UploadCertificateFiles() {
         storage: diskStorage({
           destination: './images/uploads',
           filename: (req, file, cb) => {
-            const ext = extname(file.originalname);
-            const name = file.originalname
-              .replace(/\s+/g, '_')
-              .replace(ext, '');
-            cb(null, `${name}_${Date.now()}${ext}`);
+            const randomName = Array(32)
+              .fill(null)
+              .map(() => Math.round(Math.random() * 16).toString(16))
+              .join('');
+            cb(null, `${randomName}${extname(file.originalname || '')}`);
           },
         }),
       }),
