@@ -1,4 +1,4 @@
-import { LessonEntity, ScheduleEntity } from '@app/db';
+import { DutyDateEntity, LessonEntity, ScheduleEntity } from '@app/db';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PaginateQuery, Paginated, paginate } from 'nestjs-paginate';
 import { DataSource } from 'typeorm';
@@ -77,12 +77,20 @@ export class ScheduleService {
   }
 
   async update(id: number, dto: UpdateScheduleDto) {
+    const { dutyDateId } = dto;
     const repo = this.ds.getRepository(ScheduleEntity);
     const existing = await repo.findOne({ where: { id } });
     if (!existing) throw new NotFoundException('Schedule not found');
 
+    const dutyDate = await this.ds.getRepository(DutyDateEntity).findOne({
+      where: { id: dutyDateId },
+    });
+    if (!dutyDate)
+      throw new NotFoundException(`DutyDate with id ${id} not found`);
+
     const updated = repo.merge(existing, {
       ...dto,
+      date: dutyDate.date,
       instructor: dto.instructorId ? { id: dto.instructorId } : undefined,
       dutyDate: dto.dutyDateId ? { id: dto.dutyDateId } : undefined,
       vehicle: dto.vehicleId ? { id: dto.vehicleId } : undefined,
@@ -92,12 +100,12 @@ export class ScheduleService {
     if (dto.status === 'BOOKED' || dto.status === 'APPROVED') {
       await Promise.all([
         this.noficy.create({
-          title: `Congragulations Scedule Has Been ${dto.status.toLowerCase()} Successfuly!`,
+          title: `Congratulations Schedule Has Been ${dto.status.toLowerCase()} Successfully!`,
           description: 'Please, waite for approval',
           userId: existing?.student?.id,
         }),
         this.noficy.create({
-          title: `Congragulations Scedule Has Been ${dto.status.toLowerCase()} Successfuly!`,
+          title: `Congratulations Schedule Has Been ${dto.status.toLowerCase()} Successfully!`,
           description: 'Please, waite for approval',
           userId: existing?.instructor?.id,
         })

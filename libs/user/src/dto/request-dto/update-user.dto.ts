@@ -451,7 +451,7 @@ export class UpdateAdminPayload {
       licenseProfile: {
         licensePic: this._licensePic,
         licenseBackPic: this._licenseBackPic,
-        licenseTypeId: this._licenseTypeId,
+        licenseType: { id: this._licenseTypeId },
         registrationNo: this._registrationNo,
         gearType: this._gearType,
         issuedDate: this._issuedDate,
